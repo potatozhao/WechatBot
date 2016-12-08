@@ -693,7 +693,10 @@ sn  :   send text message by name
                 elif "@@" == msg["ToUserName"][:2]:
                     grpName = self.getGrpNameByID(msg["ToUserName"])
                     usrName = self.getUsrNameByID(msg["FromUserName"])
-                    content = msg["Content"]
+                    if "@" == msg["Content"][:1]:
+                        content = msg["Content"][(msg["Content"].find(":") + 6) :]
+                    else:
+                        content = msg["Content"]
                 else:
                     usrName = self.getUsrNameByID(msg["FromUserName"])
                     content = msg["Content"]
