@@ -1,4 +1,4 @@
-# wechatbot
+# WechatBot
 
 WechatBot serves as a basic tool for automatical Wechat message processing (receiving and sending) based on Web Wechat APIs using Python.
 
