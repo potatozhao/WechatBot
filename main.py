@@ -11,8 +11,14 @@ import  logging
 logging.basicConfig(format="%(levelname)-9s[%(asctime)s][%(filename)s:%(funcName)s:%(lineno)d] %(message)s \\EOF", level=logging.INFO);
 # time processing and thread sleeping
 import  time
+try:
+    import  schedule
+except:
+    logging.fatal('No schedule module installed. Try "pip install schedule" first.')
 # random module for generating random strings
 import  random
+# thread module for multi-thread message recieving and sending
+import  threading
 
 # wechatbot
 import  wechatbot
@@ -111,7 +117,15 @@ def main():
     
     # wechat bot
     wbot = WechatBotDemo()
-    wbot.run(conf)
+    wbotThread = threading.Thread(target = wbot.run, args = (conf))
+    wbotThread.start()
+
+    # scheduled events
+    schedule.every().minutes.do(WechatBotDemo.sendMsgTextByID, wbot, "filehelper", "定时消息/1min")
+    schedule.every(10).minutes.do(WechatBotDemo.sendMsgTextByID, wbot, "filehelper", "定时消息/10min")
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
     return
     
